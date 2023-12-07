@@ -1,0 +1,170 @@
+// Please see https://protobuf.dev/programming-guides/proto3/ for details on the different data types
+
+syntax = "proto3";
+
+
+// Define a message type for HEALTH.
+enum DispenserStatus {
+    DispenserStatus_Unspecified = 0;
+    PARTIAL = 1;
+    BLOCKAGE = 2;
+    OPTIMAL = 3;
+}
+enum SensorStatus {
+    SensorStatus_Unspecified = 0;
+    SENSOR_BAD = 1;
+    SENSOR_GOOD = 2;
+}
+enum LightbulbStatus {
+    LightbulbStatus_Unspecified = 0;
+    LIGHT_BAD = 1;
+    LIGHT_GOOD = 2;
+}
+message Health {
+    DispenserStatus dispenser = 1;
+    int32 icemaker = 2;
+    LightbulbStatus lightbulb = 3;
+    int32 fridge_temp = 4;
+    int32 freezer_temp = 5;
+    SensorStatus sensor_status = 6;
+    double humidity = 7;
+    int32 door_openings = 8;
+}
+
+// define enums and response message
+enum ResponseCode {
+    ResponseCode_Unspecified = 0;
+    BAD_REQUEST = 1;
+    OK = 2;
+}
+enum ContentsStatus {
+    ContentsStatus_Unspecified = 0;
+    YOU_ARE_HEALTHY = 1;
+    BAD_REQ = 2;
+    ORDER_PLACED = 3;
+}
+message Response
+{
+    ResponseCode code = 1;
+    ContentsStatus contents = 2;
+}
+
+// Message types for VeggieOrder, CanOrder, BottleOrder, CansAndBottles, Milk, Bread, and Meat
+message VeggieOrder {
+  double tomato = 1;
+  double cucumber = 2;
+  double eggplant = 3;
+  double broccoli = 4;
+  double carrot = 5;
+  double onion = 6;
+}
+
+message CansAndBottles {
+  message CanOrder {
+    int32 coke = 1;
+    int32 pepsi = 2;
+    int32 coors = 3;
+  }
+
+  message BottleOrder {
+    int32 sprite = 1;
+    int32 rootbeer = 2;
+    int32 fanta = 3;
+  }
+  CanOrder cans = 1;
+  BottleOrder bottles = 2;
+}
+
+message Milk {
+  enum MilkType {
+    MilkType_Unspecified = 0;
+    OnePercent = 1;
+    TwoPercent = 2;
+    FatFree = 3;
+    Whole = 4;
+    Almond = 5;
+    Cashew = 6;
+    Oat = 7;
+  }
+  MilkType type = 1;
+  double quantity = 2;
+}
+
+message Bread {
+  enum BreadType {
+    BreadType_Unspecified = 0;
+    Pumpernickel = 1;
+    Rye = 2;
+    White = 3;
+    Sourdough = 4;
+    WholeWheat = 5;
+  }
+  BreadType type = 1;
+  int32 quantity = 2;
+}
+
+message Meat {
+  enum MeatType {
+    MeatType_Unspecified = 0;
+    Chicken = 1;
+    Turkey = 2;
+    Ham = 3;
+    Pork = 4;
+    Steak = 5;
+    GroundBeef = 6;
+  }
+  MeatType type = 1;
+  double quantity = 2;
+}
+
+// Message type for Order (top level for Order)
+message Order {
+  VeggieOrder veggies = 5;
+  CansAndBottles drinks = 6;
+  repeated Milk milk = 7;
+  repeated Bread bread = 8;
+  repeated Meat meat = 9;
+}
+
+enum MsgType {
+    MsgType_Unspecified = 0;
+    ResponseType = 1;
+    OrderType = 2;
+    HealthType = 3;
+}
+
+
+message Master {
+    MsgType type = 1;
+    double ts = 2;
+    oneof msgBody {
+        Health healthBody = 3;
+        Order orderBody = 4;
+        Response responseBody = 5;
+    }
+}
+
+
+// Note that in our programming assignment we have more than one message type
+// (Grocery and Health).  Thus, you might want to use an enumerated type to
+// first include the message type. ProtocolBuffers also includes a "OneOf"
+// feature in which a field can be one of many different choices. In this way
+// you could define a message for grocery msg body and health msg body, and
+// declare these as one of fields in this top level message. When serializing
+// and deserializing, you consult the message type field and take actions
+// appropriately.  
+
+// Note that in your assignment, since you will have at least two separate types of 
+// There is no "top level" root structure as in FlatBufs. We decide what is top for us
+
+// Protocol Buffers also allow the facility to define services so as to support
+// remote procedure calls. This did not exist in FlatBufs, but we declare one
+// here as gRPC is a remote procedure call approach where the service must
+// provide an interface declaring what is accepted as a request and what goes
+// back as a response for that request. A response can comprise empty field if
+// nothing is expected as a response.
+
+service DummyService
+{
+    rpc method (Master) returns (Master) {};
+}

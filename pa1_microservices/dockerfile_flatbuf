@@ -1,0 +1,78 @@
+# Download base image ubuntu 22.04
+
+FROM ubuntu:22.04
+
+# LABEL about the custom image
+
+LABEL maintainer="trevorjones1211@gmail.com"
+
+LABEL version="0.1"
+
+LABEL description="This is our custom Docker Image for ZeroMQ and Flatbuffers."
+
+# Disable prompt during packages install
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install the key packages
+
+RUN apt-get -y update && apt-get install -y cmake git gcc g++ clang default-jdk python3-dev python3-pip wget net-tools dnsutils iputils-ping iputils-tracepath iputils-arping iputils-clockdiff inetutils-traceroute emacs vim libzmq3-dev protobuf-compiler
+
+# Upgrade pip to the latest version
+
+RUN python3 -m pip install --upgrade pip
+
+# Install any python packages
+
+RUN python3 -m pip install --upgrade grpcio grpcio-tools
+
+WORKDIR /work
+
+# Copy all of the files and directories from current directory 
+
+# to the current directory within the container
+
+COPY FlatBuffers/flatbufdemo_local.py .
+COPY FlatBuffers/flatbufdemo_zmq.py .
+COPY FlatBuffers/flatbuf_test_local.py .
+COPY FlatBuffers/flatbuf_test_zmq.py .
+COPY FlatBuffers/custom_msg.py .
+COPY FlatBuffers/health_msg.py .
+COPY FlatBuffers/master_msg.py .
+COPY FlatBuffers/order_msg.py .
+COPY FlatBuffers/response_msg.py .
+COPY FlatBuffers/schema.fbs .
+COPY FlatBuffers/serialize.py .
+COPY FlatBuffers/tcp_client.py .
+COPY FlatBuffers/tcp_server.py .
+COPY FlatBuffers/CustomAppProto/BottleOrder.py .
+COPY FlatBuffers/CustomAppProto/Bread.py .
+COPY FlatBuffers/CustomAppProto/BreadType.py .
+COPY FlatBuffers/CustomAppProto/CanOrder.py .
+COPY FlatBuffers/CustomAppProto/CansAndBottles.py .
+COPY FlatBuffers/CustomAppProto/Contents.py .
+COPY FlatBuffers/CustomAppProto/ContentsStatus.py .
+COPY FlatBuffers/CustomAppProto/DispenserOptions.py .
+COPY FlatBuffers/CustomAppProto/Health.py .
+COPY FlatBuffers/CustomAppProto/HealthBody.py .
+COPY FlatBuffers/CustomAppProto/HealthContents.py .
+COPY FlatBuffers/CustomAppProto/__init__.py .
+COPY FlatBuffers/CustomAppProto/LightStatus.py .
+COPY FlatBuffers/CustomAppProto/Master.py .
+COPY FlatBuffers/CustomAppProto/Meat.py .
+COPY FlatBuffers/CustomAppProto/MeatType.py .
+COPY FlatBuffers/CustomAppProto/Milk.py .
+COPY FlatBuffers/CustomAppProto/MilkType.py .
+COPY FlatBuffers/CustomAppProto/msgBody.py .
+COPY FlatBuffers/CustomAppProto/Order.py .
+COPY FlatBuffers/CustomAppProto/OrderBody.py .
+COPY FlatBuffers/CustomAppProto/OrderContents.py .
+COPY FlatBuffers/CustomAppProto/RequestStatus.py .
+COPY FlatBuffers/CustomAppProto/Response.py .
+COPY FlatBuffers/CustomAppProto/ResponseBody.py .
+COPY FlatBuffers/CustomAppProto/ResponseContents.py .
+COPY FlatBuffers/CustomAppProto/ResponseType.py .
+COPY FlatBuffers/CustomAppProto/SensorStatus.py .
+COPY FlatBuffers/CustomAppProto/Types.py .
+COPY FlatBuffers/CustomAppProto/VeggieOrder.py .
+
