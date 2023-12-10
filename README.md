@@ -27,7 +27,15 @@ to test ingress controller:
 curl http://demo1.localdev.me:8080/
 curl http://demo2.localdev.me:8080/
 ```
-
+to test load balancer of ingress controller:
+```
+curl -I -H "Host: demo1.localdev.me" http://172.31.71.218
+curl -I -H "Host: demo2.localdev.me" http://172.31.71.218
+```
+the above two commands should both return with 200 status. the below command should return a 404:
+```
+curl -I -H "Host: demo3.localdev.me" http://172.31.71.218
+```
 ## Trevor's next steps
 - looking into SSL termination utilizing this ingress resource
 - eventually, connecting to OAuth

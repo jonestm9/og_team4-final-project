@@ -10,6 +10,10 @@ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
+  
+# Create secret using our generated files
+kubectl create secret tls demo-tls-secret --namespace ingress-nginx \
+  --cert=demo-tls-cert.pem --key=demo-tls-key.pem
 
 # Create demo-service1 deployment and expose it
 kubectl create deployment demo-service1 --image=httpd --port=8081
