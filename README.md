@@ -53,6 +53,35 @@ now, the goal is to figure out how to extrapolate this example code to have mult
 
 https://kubernetes.github.io/ingress-nginx/deploy/
 
+## temporary
+
+testing these commands:
+```
+# Service 1
+kubectl create deployment demo-service1 --image=httpd --port=8081
+
+# Expose Service 1
+kubectl expose deployment demo-service1
+
+# Service 2
+kubectl create deployment demo-service2 --image=httpd --port=8082
+
+# Expose Service 2
+kubectl expose deployment demo-service2
+# create the ingress resource
+kubectl create ingress demo-ingress --class=nginx \
+  --rule="demo.localdev.me/service1/*=demo-service1:8081" \
+  --rule="demo.localdev.me/service2/*=demo-service2:8082"
+# port forwarding
+# Forward port 8081 to demo-service1
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8081:80
+
+# Forward port 8082 to demo-service2
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8082:80
+curl http://demo.localdev.me:8081/service1/
+curl http://demo.localdev.me:8082/service2/
+```
+
 ## Trevor's next steps
 
 - after booting ingress controller to namespace and deploying our services in pods
