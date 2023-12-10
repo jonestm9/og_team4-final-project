@@ -29,6 +29,8 @@ curl http://demo2.localdev.me:8080/
 ```
 
 ## Trevor's next steps
-- looking into SSL termination utilizing this ingress resource
+- SSL termination utilizing this ingress resource
+- making sure the load balancer actually works
+- adding more microservices than the 2 demo services
 - eventually, connecting to OAuth
 
