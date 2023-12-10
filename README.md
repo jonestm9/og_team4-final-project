@@ -37,6 +37,8 @@ the above two commands should both return with 200 status. the below command sho
 curl -I -H "Host: demo3.localdev.me" http://172.31.71.218
 ```
 ## Trevor's next steps
-- looking into SSL termination utilizing this ingress resource
+- SSL termination utilizing this ingress resource
+- making sure the load balancer actually works
+- adding more microservices than the 2 demo services
 - eventually, connecting to OAuth
 
