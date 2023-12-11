@@ -10,7 +10,7 @@ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
-  
+
 # Create secret using our generated files
 kubectl create secret tls demo-tls-secret --namespace ingress-nginx \
   --cert=demo-tls-cert.pem --key=demo-tls-key.pem
@@ -23,7 +23,7 @@ kubectl expose deployment demo-service1 --port=80
 kubectl create deployment demo-service2 --image=nginx --port=8082
 kubectl expose deployment demo-service2 --port=80
 
-# Create Ingress for demo-service1 and demo-service2
+# Apply the Ingress resource from the YAML file with kubectl apply -f ingress-resource.yaml
 kubectl create ingress demo-ingress --class=nginx \
   --rule="demo1.localdev.me/*=demo-service1:80" \
   --rule="demo2.localdev.me/*=demo-service2:80"
@@ -39,3 +39,4 @@ kubectl patch svc ingress-nginx-controller -n ingress-nginx -p '{"spec": {"type"
 
 # Display Ingress-Nginx service details
 kubectl get service ingress-nginx-controller --namespace=ingress-nginx
+
